@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h3>Nuevo Anuncio</h3>
+        <form method="POST" class="needs-validation" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.titulo.label(class="form-label") }}
+                {{ form.titulo(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.descripcion.label(class="form-label") }}
+                {{ form.descripcion(class="form-control", rows="3") }}
+            </div>
+            <div class="mb-3">
+                {{ form.categoria_id.label(class="form-label") }}
+                {{ form.categoria_id(class="form-select") }}
+            </div>
+            {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+    </div>
+    <div class="col-md-8">
+        <h3>Tablón de Anuncios</h3>
+        <div class="list-group mt-3">
+            {% for anuncio in anuncios %}
+            <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm rounded">
+                <div class="d-w w-100 justify-content-between">
+                    <h5 class="mb-1 text-primary">{{ anuncio.titulo }}</h5>
+                    <small class="text-muted">Categoría: <strong>{{ anuncio.categoria.nombre if anuncio.categoria else 'General' }}</strong></small>
+                </div>
+                <p class="mb-1 mt-2">{{ anuncio.descripcion }}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted">Publicado por: Usuario #{{ anuncio.usuario_id }}</small>
+                    <a href="{{ url_for('anuncios.eliminar', id=anuncio.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('¿Deseas eliminar este anuncio?');">Eliminar</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-secondary text-center" role="alert">
+                No hay anuncios publicados en este momento.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
